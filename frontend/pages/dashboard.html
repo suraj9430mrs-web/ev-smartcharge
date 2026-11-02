@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Dashboard — EV SmartCharge</title>
+  <meta name="description" content="Manage your electric vehicles, book intelligent charging slots, and track charging history on the EV SmartCharge platform.">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+</head>
+<body>
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="site-header">
+    <div class="header-container container">
+      <a href="/" class="brand-logo">
+        <div class="logo-icon">⚡</div>
+        <div class="brand-text">
+          <strong>EV SmartCharge</strong>
+          <small>Customer Operations Hub</small>
+        </div>
+      </a>
+
+      <nav class="main-nav">
+        <ul class="nav-list">
+          <li><a href="/">Home</a></li>
+          <li><a href="/pages/find-charger.html">Find a Charger</a></li>
+          <li><a href="/pages/solutions.html">Solutions</a></li>
+          <li><a href="/pages/bookings.html">My Bookings</a></li>
+          <li><a href="/pages/dashboard.html" class="active">Dashboard</a></li>
+          <li><a href="#" onclick="auth.logout(); return false;" style="color: #D9534F;">Logout</a></li>
+        </ul>
+      </nav>
+
+      <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+    </div>
+  </header>
+
+  <!-- ==================== DASHBOARD HERO ==================== -->
+  <section class="dashboard-banner">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+        <div>
+          <span class="badge" style="background: rgba(255,255,255,0.2); color: #fff; margin-bottom: 8px;">VERIFIED EV DRIVER</span>
+          <h1 id="user-greeting">Welcome to EV SmartCharge</h1>
+          <p id="user-subtext">Manage your registered electric fleet and charging reservations</p>
+        </div>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <button class="btn btn-primary" onclick="openBookingModal()" style="background: #fff; color: var(--color-primary-dark); font-weight: 700; border: none;">
+            ⚡ Book Charging Slot
+          </button>
+          <button class="btn btn-secondary" onclick="openAddVehicleModal()" style="border-color: rgba(255,255,255,0.6); color: #fff;">
+            + Register New EV
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== MAIN DASHBOARD BODY ==================== -->
+  <main class="container" style="padding-bottom: 60px;">
+
+    <!-- Telemetry Metric Cards -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-info">
+          <h3 id="stat-vehicles">0</h3>
+          <span>Registered EVs</span>
+        </div>
+        <div class="metric-icon">🚗</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-info">
+          <h3 id="stat-charging" style="color: #1A73E8;">0</h3>
+          <span>Active Sessions</span>
+        </div>
+        <div class="metric-icon" style="background: #E8F0FE; color: #1A73E8;">⚡</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-info">
+          <h3 id="stat-confirmed" style="color: var(--color-primary);">0</h3>
+          <span>Upcoming Bookings</span>
+        </div>
+        <div class="metric-icon">📅</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-info">
+          <h3 id="stat-completed" style="color: #68756C;">0</h3>
+          <span>Completed Charges</span>
+        </div>
+        <div class="metric-icon" style="background: #F1F3F4; color: #5F6368;">✓</div>
+      </div>
+    </div>
+
+    <!-- Quick Profile & Actions Bar -->
+    <div class="card" style="margin-bottom: 32px; background: #fff;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <div style="width: 52px; height: 52px; border-radius: 50%; background: #E8F4EC; color: var(--color-primary); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: bold;">
+            👤
+          </div>
+          <div>
+            <h3 id="profile-name" style="color: var(--color-primary-dark); font-size: 1.15rem; margin-bottom: 2px;">Driver Account</h3>
+            <div style="font-size: 0.85rem; color: var(--color-text-secondary);">
+              <span id="profile-email">email@example.com</span> • <span id="profile-mobile">+91 00000 00000</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 10px;">
+          <button class="btn btn-secondary btn-sm" onclick="openEditProfileModal()">✏️ Edit Profile</button>
+          <a href="/pages/find-charger.html" class="btn btn-secondary btn-sm">🔍 Find a Charger</a>
+          <a href="/pages/bookings.html" class="btn btn-primary btn-sm">View All Bookings ➔</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- REGISTERED VEHICLES SECTION -->
+    <div style="margin-bottom: 40px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <div>
+          <h2 style="font-size: 1.3rem; color: var(--color-primary-dark);">My Electric Vehicles</h2>
+          <p style="font-size: 0.85rem; color: var(--color-text-secondary);">Vehicles configured for automated C++ slot matching and rapid reservations</p>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="openAddVehicleModal()">+ Add Vehicle</button>
+      </div>
+
+      <div class="table-responsive">
+        <table class="app-table">
+          <thead>
+            <tr>
+              <th>Registration No.</th>
+              <th>Make & Model</th>
+              <th>Vehicle Class</th>
+              <th>Connector Standard</th>
+              <th>Battery Pack</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="vehicles-table-body">
+            <tr>
+              <td colspan="6" style="text-align: center; color: var(--color-text-secondary); padding: 30px;">
+                Loading vehicles from database...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- RECENT BOOKINGS SECTION -->
+    <div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <div>
+          <h2 style="font-size: 1.3rem; color: var(--color-primary-dark);">Recent Reservations & Charging Sessions</h2>
+          <p style="font-size: 0.85rem; color: var(--color-text-secondary);">Live status powered by C++ slot assignment engine</p>
+        </div>
+        <a href="/pages/bookings.html" class="btn btn-secondary btn-sm">All Bookings ➔</a>
+      </div>
+
+      <div class="table-responsive">
+        <table class="app-table">
+          <thead>
+            <tr>
+              <th>Booking Ref</th>
+              <th>Vehicle</th>
+              <th>Charging Bay</th>
+              <th>Date & Time</th>
+              <th>Duration</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="recent-bookings-body">
+            <tr>
+              <td colspan="7" style="text-align: center; color: var(--color-text-secondary); padding: 30px;">
+                Loading reservations from database...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ==================== ADD / EDIT VEHICLE MODAL ==================== -->
+  <div id="vehicle-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="vehicle-modal-title">🚗 Register New Electric Vehicle</h3>
+        <button class="modal-close-btn" onclick="closeVehicleModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="vehicle-form">
+          <input type="hidden" id="veh-edit-id" value="">
+
+          <div class="booking-form-group">
+            <label for="veh-reg">Registration Plate Number *</label>
+            <input type="text" id="veh-reg" placeholder="e.g. KA-01-EV-2026" required uppercase>
+          </div>
+
+          <div class="form-row">
+            <div class="booking-form-group">
+              <label for="veh-model">Vehicle Make & Model *</label>
+              <input type="text" id="veh-model" placeholder="e.g. Tata Nexon EV" required>
+            </div>
+            <div class="booking-form-group">
+              <label for="veh-type">Vehicle Category</label>
+              <select id="veh-type">
+                <option value="4-Wheeler (Car)">4-Wheeler (Car)</option>
+                <option value="SUV / Crossover">SUV / Crossover</option>
+                <option value="2-Wheeler (Bike/Scooter)">2-Wheeler (Bike/Scooter)</option>
+                <option value="Commercial / Fleet">Commercial / Fleet</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="booking-form-group">
+              <label for="veh-connector">Charging Connector Type *</label>
+              <select id="veh-connector" required>
+                <option value="CCS">CCS 2 (DC Ultra-Fast)</option>
+                <option value="CHAdeMO">CHAdeMO (DC Rapid)</option>
+                <option value="Type2">Type 2 (AC Fast)</option>
+              </select>
+            </div>
+            <div class="booking-form-group">
+              <label for="veh-battery">Battery Capacity (kWh) *</label>
+              <input type="number" id="veh-battery" min="5" max="250" step="0.5" value="40.5" required>
+            </div>
+          </div>
+
+          <div style="margin-top: 24px; display: flex; gap: 12px;">
+            <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="closeVehicleModal()">Cancel</button>
+            <button type="submit" id="save-veh-btn" class="btn btn-primary" style="flex: 1;">Save Vehicle ➔</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== EDIT PROFILE MODAL ==================== -->
+  <div id="profile-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>👤 Edit Profile Details</h3>
+        <button class="modal-close-btn" onclick="closeEditProfileModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="profile-form">
+          <div class="booking-form-group">
+            <label for="prof-name">Full Name *</label>
+            <input type="text" id="prof-name" required>
+          </div>
+          <div class="booking-form-group">
+            <label for="prof-mobile">Mobile Number *</label>
+            <input type="tel" id="prof-mobile" required>
+          </div>
+          <div style="margin-top: 24px; display: flex; gap: 12px;">
+            <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="closeEditProfileModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary" style="flex: 1;">Update Profile</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== OFFICIAL PRINTABLE RECEIPT MODAL ==================== -->
+  <div id="receipt-modal" class="modal-overlay">
+    <div class="modal-card" style="max-width: 600px;">
+      <div class="modal-header no-print">
+        <h3>⚡ Official Booking Receipt</h3>
+        <button class="modal-close-btn" onclick="closeReceiptModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="receipt-wrapper" id="receipt-content">
+          <!-- Dynamically populated -->
+        </div>
+        <div class="no-print" style="margin-top: 20px; display: flex; gap: 12px;">
+          <button class="btn btn-secondary" style="flex: 1;" onclick="closeReceiptModal()">Close</button>
+          <button class="btn btn-primary" style="flex: 1;" onclick="window.print();">🖨️ Print Official Receipt</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom" style="border: none; padding: 24px 0 0;">
+        <p>© 2026 EV SmartCharge Technologies Pvt. Ltd. All Rights Reserved.</p>
+        <p style="color: #6C8E7B; font-size: 0.75rem;">Empowering clean, green, connected electric mobility across India.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+    // Enforce Customer Authentication
+    if (!auth.requireAuth()) {
+      // redirected by helper
+    }
+
+    let userVehicles = [];
+    let userBookings = [];
+
+    async function loadDashboardData() {
+      const user = auth.getUser();
+      if (user) {
+        document.getElementById('user-greeting').textContent = `Welcome back, ${user.fullName}!`;
+        document.getElementById('profile-name').textContent = user.fullName;
+        document.getElementById('profile-email').textContent = user.email;
+        document.getElementById('profile-mobile').textContent = user.mobile || 'Registered Driver';
+      }
+
+      try {
+        // 1. Fetch user vehicles
+        userVehicles = await api.get('/vehicles');
+        renderVehiclesTable(userVehicles);
+        document.getElementById('stat-vehicles').textContent = userVehicles.length;
+
+        // 2. Fetch user bookings
+        userBookings = await api.get('/bookings');
+        renderBookingsTable(userBookings);
+
+        let activeCount = 0;
+        let confirmedCount = 0;
+        let completedCount = 0;
+
+        userBookings.forEach(b => {
+          if (b.status === 'Charging') activeCount++;
+          else if (b.status === 'Confirmed' || b.status === 'Pending') confirmedCount++;
+          else if (b.status === 'Completed') completedCount++;
+        });
+
+        document.getElementById('stat-charging').textContent = activeCount;
+        document.getElementById('stat-confirmed').textContent = confirmedCount;
+        document.getElementById('stat-completed').textContent = completedCount;
+
+      } catch (err) {
+        showToast('Error loading dashboard telemetry: ' + err.message, 'error');
+      }
+    }
+
+    function renderVehiclesTable(vehicles) {
+      const tbody = document.getElementById('vehicles-table-body');
+      if (vehicles.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align: center; padding: 32px; color: var(--color-text-secondary);">
+              No vehicles registered yet. Click <strong>+ Register New EV</strong> to connect your electric car.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = vehicles.map(v => `
+        <tr>
+          <td><strong style="color: var(--color-primary-dark); font-family: monospace; font-size: 0.95rem;">${v.registrationNumber}</strong></td>
+          <td>${v.model}</td>
+          <td><span style="font-size: 0.85rem; color: #555;">${v.vehicleType}</span></td>
+          <td><span class="badge badge-type">${v.connectorType}</span></td>
+          <td>${v.batteryCapacity} kWh</td>
+          <td>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-secondary btn-sm" onclick="openEditVehicleModal(${v.id})">Edit</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteVehicle(${v.id}, '${v.registrationNumber}')">Remove</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderBookingsTable(bookings) {
+      const tbody = document.getElementById('recent-bookings-body');
+      if (bookings.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" style="text-align: center; padding: 32px; color: var(--color-text-secondary);">
+              No reservations found. Click <strong>⚡ Book Charging Slot</strong> to reserve a high-speed charging bay.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      // Show top 5 recent
+      const recent = bookings.slice(0, 5);
+      tbody.innerHTML = recent.map(b => {
+        const statusClass = `status-${b.status.toLowerCase()}`;
+        return `
+          <tr>
+            <td><strong style="color: var(--color-primary-dark); font-family: monospace;">${b.bookingReference}</strong></td>
+            <td>${b.vehicleRegistration} <small style="color: #666;">(${b.vehicleModel || 'EV'})</small></td>
+            <td>${b.stationName || 'Bay #' + b.stationId}</td>
+            <td>${b.bookingDate} • ${b.startTime} - ${b.endTime}</td>
+            <td>${b.estimatedDuration} mins</td>
+            <td><span class="status-pill ${statusClass}">${b.status}</span></td>
+            <td>
+              <div style="display: flex; gap: 6px;">
+                <button class="btn btn-secondary btn-sm" onclick="viewReceipt(${b.id})">Receipt</button>
+                ${(b.status === 'Confirmed' || b.status === 'Waiting') ? `
+                  <button class="btn btn-danger btn-sm" onclick="cancelBooking(${b.id})">Cancel</button>
+                ` : ''}
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Vehicle Modal Handling
+    function openAddVehicleModal() {
+      document.getElementById('vehicle-modal-title').textContent = '🚗 Register New Electric Vehicle';
+      document.getElementById('veh-edit-id').value = '';
+      document.getElementById('vehicle-form').reset();
+      document.getElementById('vehicle-modal').classList.add('active');
+    }
+
+    function openEditVehicleModal(vId) {
+      const v = userVehicles.find(item => item.id === vId);
+      if (!v) return;
+
+      document.getElementById('vehicle-modal-title').textContent = '✏️ Edit Electric Vehicle Details';
+      document.getElementById('veh-edit-id').value = v.id;
+      document.getElementById('veh-reg').value = v.registrationNumber;
+      document.getElementById('veh-reg').disabled = true; // Plate number cannot change
+      document.getElementById('veh-model').value = v.model;
+      document.getElementById('veh-type').value = v.vehicleType;
+      document.getElementById('veh-connector').value = v.connectorType;
+      document.getElementById('veh-battery').value = v.batteryCapacity;
+      document.getElementById('vehicle-modal').classList.add('active');
+    }
+
+    function closeVehicleModal() {
+      document.getElementById('vehicle-modal').classList.remove('active');
+      document.getElementById('veh-reg').disabled = false;
+    }
+
+    document.getElementById('vehicle-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const editId = document.getElementById('veh-edit-id').value;
+      const regNum = document.getElementById('veh-reg').value.trim();
+      const model = document.getElementById('veh-model').value.trim();
+      const vehicleType = document.getElementById('veh-type').value;
+      const connectorType = document.getElementById('veh-connector').value;
+      const batteryCapacity = parseFloat(document.getElementById('veh-battery').value);
+
+      try {
+        if (editId) {
+          await api.put(`/vehicles/${editId}`, { model, vehicleType, connectorType, batteryCapacity });
+          showToast('Vehicle updated successfully.', 'success');
+        } else {
+          await api.post('/vehicles', { registrationNumber: regNum, model, vehicleType, connectorType, batteryCapacity });
+          showToast('Vehicle registered successfully!', 'success');
+        }
+        closeVehicleModal();
+        loadDashboardData();
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    });
+
+    async function deleteVehicle(vId, regNum) {
+      if (!confirm(`Are you sure you want to remove vehicle ${regNum} from your account?`)) return;
+
+      try {
+        await api.delete(`/vehicles/${vId}`);
+        showToast(`Vehicle ${regNum} removed.`, 'info');
+        loadDashboardData();
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    }
+
+    // Cancel Booking
+    async function cancelBooking(bid) {
+      if (!confirm('Are you sure you want to cancel this charging slot reservation?')) return;
+      try {
+        await api.post(`/bookings/${bid}/cancel`, {});
+        showToast('Reservation cancelled successfully.', 'success');
+        loadDashboardData();
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    }
+
+    // Receipt Modal
+    async function viewReceipt(bid) {
+      try {
+        const res = await api.get(`/bookings/${bid}`);
+        const b = res.booking;
+        const receiptDiv = document.getElementById('receipt-content');
+
+        receiptDiv.innerHTML = `
+          <div class="receipt-header">
+            <div style="font-size: 2rem; color: var(--color-primary); margin-bottom: 4px;">⚡</div>
+            <h2 style="color: var(--color-primary-dark); font-size: 1.4rem; margin-bottom: 2px;">EV SMARTCHARGE</h2>
+            <p style="font-size: 0.8rem; color: var(--color-text-secondary); margin-bottom: 8px;">Official Slot Allocation & Charging Receipt</p>
+            <div class="receipt-ref">${b.bookingReference}</div>
+          </div>
+
+          <div style="font-size: 0.9rem; line-height: 1.8;">
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid #EFEFEF; padding:6px 0;">
+              <span><strong>Customer Name:</strong></span>
+              <span>${b.customerName}</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid #EFEFEF; padding:6px 0;">
+              <span><strong>Vehicle Plate:</strong></span>
+              <span>${b.vehicleRegistration} (${b.vehicleModel})</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid #EFEFEF; padding:6px 0;">
+              <span><strong>Connector Standard:</strong></span>
+              <span><span class="badge badge-type">${b.vehicleConnector}</span></span>
+            </div>
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid #EFEFEF; padding:6px 0;">
+              <span><strong>Assigned Station:</strong></span>
+              <span><strong>${b.stationName}</strong> (${b.chargingSpeed} kW DC Fast)</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid #EFEFEF; padding:6px 0;">
+              <span><strong>Location:</strong></span>
+              <span>${b.stationLocation}</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid #EFEFEF; padding:6px 0;">
+              <span><strong>Reservation Window:</strong></span>
+              <span><strong>${b.bookingDate} • ${b.startTime} to ${b.endTime}</strong></span>
+            </div>
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid #EFEFEF; padding:6px 0;">
+              <span><strong>Energy Required:</strong></span>
+              <span>${b.requiredEnergy} kWh (Battery: ${b.currentBattery}%)</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid #EFEFEF; padding:6px 0;">
+              <span><strong>Estimated Duration:</strong></span>
+              <span><strong>${b.estimatedDuration} Minutes</strong></span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:8px 0; font-size:1rem;">
+              <span><strong>Current Status:</strong></span>
+              <span><span class="status-pill status-${b.status.toLowerCase()}">${b.status}</span></span>
+            </div>
+          </div>
+
+          <div style="margin-top: 20px; padding: 12px; background: #F9FAF9; border-radius: 4px; font-size: 0.75rem; color: #777; text-align: center;">
+            Allocated via EV SmartCharge C++ Sequential Search & Sorting Engine.<br>
+            Please arrive at the assigned bay 5 minutes before scheduled start time.
+          </div>
+        `;
+
+        document.getElementById('receipt-modal').classList.add('active');
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    }
+
+    function closeReceiptModal() {
+      document.getElementById('receipt-modal').classList.remove('active');
+    }
+
+    // Profile Edit Modal
+    function openEditProfileModal() {
+      const u = auth.getUser();
+      if (u) {
+        document.getElementById('prof-name').value = u.fullName || '';
+        document.getElementById('prof-mobile').value = u.mobile || '';
+      }
+      document.getElementById('profile-modal').classList.add('active');
+    }
+
+    function closeEditProfileModal() {
+      document.getElementById('profile-modal').classList.remove('active');
+    }
+
+    document.getElementById('profile-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fullName = document.getElementById('prof-name').value.trim();
+      const mobile = document.getElementById('prof-mobile').value.trim();
+
+      try {
+        const res = await api.put('/auth/profile', { fullName, mobile });
+        // Update session
+        const current = auth.getUser();
+        current.fullName = fullName;
+        current.mobile = mobile;
+        auth.setSession(auth.getToken(), current);
+
+        showToast('Profile updated successfully!', 'success');
+        closeEditProfileModal();
+        loadDashboardData();
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadDashboardData();
+    });
+  </script>
+</body>
+</html>
+

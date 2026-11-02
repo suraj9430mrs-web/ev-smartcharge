@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Console — EV SmartCharge</title>
+  <link rel="stylesheet" href="/css/admin.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+</head>
+<body class="admin-body">
+
+  <!-- ==================== OPERATOR LOGIN GATE ==================== -->
+  <div id="admin-login-screen" class="admin-login-wrapper">
+    <div class="admin-login-card">
+      <div class="admin-login-header">
+        <div class="admin-login-brand-icon">⚡</div>
+        <h2>EV SmartCharge NOC</h2>
+        <p>Network Operations & Plaza Management Center</p>
+      </div>
+
+      <div id="login-error-alert" class="admin-login-alert">
+        Invalid operator credentials. Access denied.
+      </div>
+
+      <form id="admin-login-form">
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label for="admin-user-input">Operator Email or Username</label>
+          <input type="text" id="admin-user-input" required placeholder="Enter authorized operator ID">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 20px;">
+          <label for="admin-pass-input">Password</label>
+          <input type="password" id="admin-pass-input" required placeholder="Enter secure password">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 1rem; margin-bottom: 16px;">
+          Sign In to Operations Console ➔
+        </button>
+      </form>
+
+      <div style="background: #F8FAF8; border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 12px; font-size: 0.8rem; color: var(--color-text-muted); text-align: center; margin-bottom: 16px;">
+        🔒 <strong>Authorized Staff Only</strong><br>
+        Access is monitored and restricted to system administrators.
+      </div>
+
+      <div style="text-align: center;">
+        <a href="/" style="font-size: 0.85rem; color: var(--color-primary); text-decoration: none; font-weight: 500;">
+          ← Return to Public Website
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MAIN AUTHENTICATED CONSOLE ==================== -->
+  <div id="admin-app-container" style="display: none; width: 100%; min-height: 100vh;">
+
+  <!-- ==================== SIDEBAR ==================== -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-brand-icon">⚡</div>
+      <div class="sidebar-brand-text">
+        <h2>EV SmartCharge</h2>
+        <span>C++ ENGINE CONSOLE</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-section="dashboard">
+        <span class="nav-icon">📊</span>
+        <span>Overview Dashboard</span>
+      </button>
+      <button class="nav-item" data-section="bookings">
+        <span class="nav-icon">📅</span>
+        <span>All Reservations</span>
+      </button>
+      <button class="nav-item" data-section="users">
+        <span class="nav-icon">👥</span>
+        <span>User Accounts</span>
+      </button>
+      <button class="nav-item" data-section="vehicles">
+        <span class="nav-icon">🚗</span>
+        <span>Vehicle Management</span>
+      </button>
+      <button class="nav-item" data-section="stations">
+        <span class="nav-icon">⚡</span>
+        <span>Station Management</span>
+      </button>
+      <button class="nav-item" data-section="assignment">
+        <span class="nav-icon">🎯</span>
+        <span>Slot Assignment</span>
+      </button>
+      <button class="nav-item" data-section="queue">
+        <span class="nav-icon">⏳</span>
+        <span>Waiting Queue</span>
+      </button>
+      <button class="nav-item" data-section="search-sort">
+        <span class="nav-icon">🔍</span>
+        <span>Search & Sort</span>
+      </button>
+      <button class="nav-item" data-section="ds-explorer">
+        <span class="nav-icon">🧩</span>
+        <span>Data Structures Explorer</span>
+      </button>
+      <button class="nav-item" data-section="history">
+        <span class="nav-icon">📜</span>
+        <span>Assignment History</span>
+      </button>
+      <button class="nav-item" data-section="reports">
+        <span class="nav-icon">📈</span>
+        <span>Reports & Analytics</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div style="font-weight: 600; color: #fff;">EV SmartCharge NOC</div>
+      <div style="font-size: 0.75rem; color: #8EA79A;">Operator: admin (Active)</div>
+      <button onclick="adminLogout()" class="btn btn-sm" style="width: 100%; margin-top: 8px; background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.25);">
+        Sign Out 🚪
+      </button>
+      <a href="/" target="_blank" style="margin-top: 6px; font-size: 0.75rem;">View Public Website ↗</a>
+    </div>
+  </aside>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <div class="admin-main">
+    
+    <!-- Top Bar -->
+    <header class="admin-topbar">
+      <div class="topbar-title">
+        <h1 id="current-section-title">Overview Dashboard</h1>
+      </div>
+      <div class="topbar-actions">
+        <span class="demo-badge" style="background:#E6F4EA; color:#137333; border-color:#A4F0C3;">🟢 Network Operations Center (NOC) — Active Session</span>
+        <button onclick="adminLogout()" class="btn btn-secondary btn-sm">Sign Out</button>
+        <a href="/" class="btn-public-site">Public Website</a>
+      </div>
+    </header>
+
+    <!-- Content Workspace -->
+    <main class="admin-content">
+
+      <!-- ==================== SECTION 1: DASHBOARD ==================== -->
+      <section id="section-dashboard" class="section-panel active">
+        <div class="section-header">
+          <div>
+            <h2>Operations Overview</h2>
+            <p>Live metrics from the C++ charging slot assignment engine.</p>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="loadDashboard()">↻ Refresh</button>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-card accent-green">
+            <span class="stat-card-title">Total Stations</span>
+            <span class="stat-card-value" id="dash-total-stations">0</span>
+            <span class="stat-card-sub">In memory array store</span>
+          </div>
+
+          <div class="stat-card accent-green">
+            <span class="stat-card-title">Available Slots</span>
+            <span class="stat-card-value" id="dash-available-slots">0</span>
+            <span class="stat-card-sub">Ready for assignment</span>
+          </div>
+
+          <div class="stat-card accent-warning">
+            <span class="stat-card-title">Occupied Slots</span>
+            <span class="stat-card-value" id="dash-occupied-slots">0</span>
+            <span class="stat-card-sub">Currently charging</span>
+          </div>
+
+          <div class="stat-card accent-blue">
+            <span class="stat-card-title">Total Vehicles</span>
+            <span class="stat-card-value" id="dash-total-vehicles">0</span>
+            <span class="stat-card-sub">Registered in system</span>
+          </div>
+
+          <div class="stat-card accent-warning">
+            <span class="stat-card-title">Waiting Vehicles</span>
+            <span class="stat-card-value" id="dash-waiting-vehicles">0</span>
+            <span class="stat-card-sub">In FIFO queue</span>
+          </div>
+
+          <div class="stat-card accent-dark">
+            <span class="stat-card-title">Successful Assignments</span>
+            <span class="stat-card-value" id="dash-total-assignments">0</span>
+            <span class="stat-card-sub">Logged in ActionStack</span>
+          </div>
+
+          <div class="stat-card accent-green">
+            <span class="stat-card-title">Station Utilization</span>
+            <span class="stat-card-value" id="dash-utilization">0%</span>
+            <span class="stat-card-sub">Occupied / Total capacity</span>
+          </div>
+        </div>
+
+        <!-- Dashboard Layout: Station Overview & Recent History -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+          
+          <div class="card">
+            <div class="card-title">
+              <span>Charging Stations Status</span>
+              <a href="#" onclick="document.querySelector('[data-section=\'stations\']').click(); return false;" style="font-size: 0.8rem; color: var(--color-primary); text-decoration: none;">Manage All ➔</a>
+            </div>
+            <div id="dash-stations-overview" style="display: flex; flex-direction: column; gap: 10px; max-height: 280px; overflow-y: auto;">
+              <!-- Loaded by admin.js -->
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">
+              <span>Recent Activity (Action Stack)</span>
+              <a href="#" onclick="document.querySelector('[data-section=\'history\']').click(); return false;" style="font-size: 0.8rem; color: var(--color-primary); text-decoration: none;">View Full History ➔</a>
+            </div>
+            <div class="table-responsive" style="max-height: 280px; overflow-y: auto;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>Action</th>
+                    <th>Vehicle</th>
+                    <th>Station</th>
+                  </tr>
+                </thead>
+                <tbody id="dash-recent-history-tbody">
+                  <!-- Loaded by admin.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ==================== SECTION: ALL RESERVATIONS ==================== -->
+      <section id="section-bookings" class="section-panel">
+        <div class="section-header">
+          <div>
+            <h2>Charging Reservations & Sessions</h2>
+            <p>Database-persisted reservations, active charging sessions, and lifecycle controls.</p>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="loadAdminBookings()">↻ Refresh</button>
+        </div>
+
+        <div class="card" style="margin-bottom: 24px;">
+          <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <input type="text" id="admin-book-search" placeholder="Search reference, vehicle, customer..." oninput="filterAdminBookings()" style="flex: 2; min-width: 200px; padding: 10px; border: 1px solid var(--color-border); border-radius: var(--radius-sm); font-size: 0.9rem;">
+            <select id="admin-book-status" onchange="filterAdminBookings()" style="flex: 1; min-width: 140px; padding: 10px; border: 1px solid var(--color-border); border-radius: var(--radius-sm); font-size: 0.9rem; background:#fff;">
+              <option value="ALL">All Statuses</option>
+              <option value="Charging">Charging (Active)</option>
+              <option value="Confirmed">Confirmed</option>
+              <option value="Completed">Completed</option>
+              <option value="Waiting">Waiting</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+            <input type="date" id="admin-book-date" onchange="filterAdminBookings()" style="flex: 1; min-width: 140px; padding: 10px; border: 1px solid var(--color-border); border-radius: var(--radius-sm); font-size: 0.9rem; background:#fff;">
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Booking Ref</th>
+                  <th>Customer</th>
+                  <th>Vehicle</th>
+                  <th>Bay / Station</th>
+                  <th>Date & Time</th>
+                  <th>Duration</th>
+                  <th>Status</th>
+                  <th>Admin Controls</th>
+                </tr>
+              </thead>
+              <tbody id="admin-bookings-tbody">
+                <tr><td colspan="8" style="text-align:center; padding:30px; color:#999;">Loading reservations...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION: USER MANAGEMENT ==================== -->
+      <section id="section-users" class="section-panel">
+        <div class="section-header">
+          <div>
+            <h2>Registered Customer Accounts</h2>
+            <p>Customer accounts, mobile contacts, role-based access, and registration logs.</p>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="loadAdminUsers()">↻ Refresh</button>
+        </div>
+
+        <div class="card" style="margin-bottom: 24px;">
+          <input type="text" id="admin-user-search" placeholder="Search customer by name, email, or mobile..." oninput="filterAdminUsers()" style="width: 100%; padding: 10px; border: 1px solid var(--color-border); border-radius: var(--radius-sm); font-size: 0.9rem;">
+        </div>
+
+        <div class="card">
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Full Name</th>
+                  <th>Email</th>
+                  <th>Mobile</th>
+                  <th>Role</th>
+                  <th>Registered On</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="admin-users-tbody">
+                <tr><td colspan="7" style="text-align:center; padding:30px; color:#999;">Loading registered users...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 2: VEHICLE MANAGEMENT ==================== -->
+      <section id="section-vehicles" class="section-panel">
+        <div class="section-header">
+          <div>
+            <h2>Vehicle Management</h2>
+            <p>Register, view, search, and delete vehicle records managed in the C++ memory array.</p>
+          </div>
+        </div>
+
+        <!-- Registration Form -->
+        <div class="card">
+          <div class="card-title">Register New Vehicle</div>
+          <form id="vehicle-register-form">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="veh-id">Vehicle ID / Registration *</label>
+                <input type="text" id="veh-id" placeholder="e.g. KA-05-EV-4321" required>
+              </div>
+
+              <div class="form-group">
+                <label for="veh-battery">Current Battery (%) *</label>
+                <input type="number" id="veh-battery" min="0" max="100" placeholder="e.g. 25" required>
+              </div>
+
+              <div class="form-group">
+                <label for="veh-energy">Required Energy (kWh) *</label>
+                <input type="number" id="veh-energy" min="0.1" step="0.1" placeholder="e.g. 35.0" required>
+              </div>
+
+              <div class="form-group">
+                <label for="veh-connector">Connector Type *</label>
+                <select id="veh-connector" required>
+                  <option value="CCS">CCS (DC Fast)</option>
+                  <option value="CHAdeMO">CHAdeMO (DC)</option>
+                  <option value="Type2">Type2 (AC)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="veh-owner">Owner Name (Optional)</label>
+                <input type="text" id="veh-owner" placeholder="e.g. Rajesh Sharma">
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">+ Register & Evaluate Slot</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Registered Vehicles Table -->
+        <div class="card">
+          <div class="card-title">
+            <span>Registered Vehicles Store (Array)</span>
+            <button class="btn btn-secondary btn-sm" onclick="loadVehicles()">↻ Refresh</button>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Vehicle ID</th>
+                  <th>Battery</th>
+                  <th>Required kWh</th>
+                  <th>Connector</th>
+                  <th>Owner</th>
+                  <th>Tier</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="vehicles-table-tbody">
+                <!-- Loaded by admin.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 3: STATION MANAGEMENT ==================== -->
+      <section id="section-stations" class="section-panel">
+        <div class="section-header">
+          <div>
+            <h2>Charging Station Management</h2>
+            <p>Manage physical charging bays sorted by charging speed (kW) in C++.</p>
+          </div>
+        </div>
+
+        <!-- Add Station Form -->
+        <div class="card">
+          <div class="card-title">Add New Charging Station</div>
+          <form id="station-register-form">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="st-id">Station ID (Integer) *</label>
+                <input type="number" id="st-id" placeholder="e.g. 107" required>
+              </div>
+
+              <div class="form-group">
+                <label for="st-speed">Charging Speed (kW) *</label>
+                <input type="number" id="st-speed" min="1" step="0.5" placeholder="e.g. 120" required>
+              </div>
+
+              <div class="form-group">
+                <label for="st-connector">Connector Standard *</label>
+                <select id="st-connector" required>
+                  <option value="CCS">CCS (DC Fast)</option>
+                  <option value="CHAdeMO">CHAdeMO (DC)</option>
+                  <option value="Type2">Type2 (AC)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="st-location">Station Bay / Location</label>
+                <input type="text" id="st-location" placeholder="e.g. Bay 7 - South Parking Corridor">
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">+ Add Station & Sort by Speed</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Stations Grid -->
+        <div class="card">
+          <div class="card-title">
+            <span>Active Charging Bays (Bubble Sorted DESC by Speed)</span>
+            <button class="btn btn-secondary btn-sm" onclick="loadStations()">↻ Refresh</button>
+          </div>
+          <div id="stations-management-grid" class="stations-grid">
+            <!-- Loaded by admin.js -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 4: SLOT ASSIGNMENT ==================== -->
+      <section id="section-assignment" class="section-panel">
+        <div class="section-header">
+          <div>
+            <h2>Slot Assignment Engine</h2>
+            <p>Trigger C++ assignment logic: sequential scan across speed-sorted stations.</p>
+          </div>
+        </div>
+
+        <div class="card" style="max-width: 650px;">
+          <div class="card-title">Assign Charging Slot to Vehicle</div>
+          
+          <form id="manual-assign-form">
+            <div class="form-group" style="margin-bottom: 20px;">
+              <label for="assign-vehicle-select">Select Registered Vehicle *</label>
+              <select id="assign-vehicle-select" required style="padding: 12px; font-size: 0.95rem;">
+                <option value="">-- Choose a Vehicle --</option>
+              </select>
+            </div>
+
+            <div style="background: #F9FAF9; border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 20px; font-size: 0.85rem; color: var(--color-text-main);">
+              <strong>Assignment Principle:</strong><br>
+              1. The C++ engine checks whether any vehicle is already waiting in the FIFO queue (guarantees fairness).<br>
+              2. Searches for the highest speed compatible available station.<br>
+              3. Calculates charging duration: <code>Time (mins) = (Required Energy / Speed) × 60</code>.<br>
+              4. Marks station occupied and logs assignment to the Action Stack.
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px;">Execute Slot Assignment ➔</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 5: WAITING QUEUE ==================== -->
+      <section id="section-queue" class="section-panel">
+        <div class="section-header">
+          <div>
+            <h2>FIFO Waiting Queue</h2>
+            <p>Array-based queue with compaction for vehicles awaiting compatible stations.</p>
+          </div>
+          <div style="display: flex; gap: 12px; align-items: center;">
+            <span id="queue-count-badge" class="badge badge-queued">0 Waiting</span>
+            <button class="btn btn-primary btn-sm" onclick="processWaitingQueue()">▶ Process Queue</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <span>Vehicles in Waiting Queue</span>
+            <button class="btn btn-secondary btn-sm" onclick="loadQueue()">↻ Refresh</button>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Queue Position</th>
+                  <th>Vehicle ID</th>
+                  <th>Battery Level</th>
+                  <th>Required Energy</th>
+                  <th>Connector Type</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="queue-table-tbody">
+                <!-- Loaded by admin.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card" style="background: #E8F4EC; border-color: #C3E2CD;">
+          <h4 style="color: var(--color-primary-dark); margin-bottom: 6px;">Queue Bug Correction & Compaction Note:</h4>
+          <p style="font-size: 0.85rem; color: var(--color-text-main); line-height: 1.6;">
+            In the original team code, removing an element from the queue used absolute index shifts. Our refactored C++ <code>Queue&lt;T&gt;</code> implementation preserves this intended behavior while enforcing automated index compaction (resetting front to 0 when rear reaches bounds), ensuring zero memory leaks or index boundary faults.
+          </p>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 6: SEARCH & SORT ==================== -->
+      <section id="section-search-sort" class="section-panel">
+        <div class="section-header">
+          <div>
+            <h2>Searching & Sorting Lab</h2>
+            <p>Live execution of Sequential Search, Binary Search, and Bubble Sort on backend data.</p>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+          
+          <!-- Search Lab -->
+          <div class="card">
+            <div class="card-title">Searching Algorithm Demonstration</div>
+            
+            <div class="form-group" style="margin-bottom: 12px;">
+              <label for="search-type">Target Entity & Algorithm</label>
+              <select id="search-type">
+                <option value="station">Station by ID (Binary Search on sorted array - O(log N))</option>
+                <option value="vehicle">Vehicle by ID (Sequential Search - O(N))</option>
+              </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label for="search-query">Search Query</label>
+              <input type="text" id="search-query" placeholder="e.g. 101 or KA-01-AB-1234">
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%; margin-bottom: 16px;" onclick="runSearchDemo()">Execute Search in C++</button>
+
+            <div id="search-results-box" style="font-size: 0.9rem; color: var(--color-text-muted);">
+              Results will appear here with execution steps and time complexity.
+            </div>
+          </div>
+
+          <!-- Sort Lab -->
+          <div class="card">
+            <div class="card-title">Bubble Sort Demonstration</div>
+            
+            <div class="form-group" style="margin-bottom: 12px;">
+              <label for="sort-field">Sort By Property</label>
+              <select id="sort-field">
+                <option value="chargingSpeed">Charging Speed (kW)</option>
+                <option value="stationID">Station ID</option>
+              </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label for="sort-order">Sort Direction</label>
+              <select id="sort-order">
+                <option value="desc">Descending (Fastest chargers first)</option>
+                <option value="asc">Ascending</option>
+              </select>
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%; margin-bottom: 16px;" onclick="runSortDemo()">Execute Bubble Sort in C++</button>
+
+            <div id="sort-results-box" style="font-size: 0.9rem; color: var(--color-text-muted);">
+              Results will display total comparisons, swaps, and step-by-step passes.
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 7: DATA STRUCTURES EXPLORER ==================== -->
+      <section id="section-ds-explorer" class="section-panel">
+        <div class="section-header">
+          <div>
+            <h2>Data Structures Educational Explorer</h2>
+            <p>Visual and interactive demonstration of memory structures executing live in C++.</p>
+          </div>
+        </div>
+
+        <!-- Explorer Navigation Tabs -->
+        <div class="ds-tabs">
+          <button class="ds-tab-btn active" data-tab="array">1. Array</button>
+          <button class="ds-tab-btn" data-tab="stack">2. Stack (LIFO)</button>
+          <button class="ds-tab-btn" data-tab="queue">3. Queue (FIFO)</button>
+          <button class="ds-tab-btn" data-tab="linkedlist">4. Linked List</button>
+        </div>
+
+        <!-- Tab 1: Array -->
+        <div id="ds-tab-array" class="ds-tab-content active">
+          <div class="ds-info-banner">
+            <strong>Contiguous Memory Array:</strong> High-performance contiguous memory buffers offering O(1) random index access. Used in EV SmartCharge for fast station and vehicle lookups.
+          </div>
+          <div class="card">
+            <div class="card-title">Live C++ Array Memory View</div>
+            <div id="ds-array-visual" class="ds-visual-container">
+              <!-- Rendered by admin.js -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Stack -->
+        <div id="ds-tab-stack" class="ds-tab-content">
+          <div class="ds-info-banner">
+            <strong>Audit Stack:</strong> Last-In-First-Out (LIFO) structure. In EV SmartCharge, a custom <code>ActionStack</code> stores system assignment operations for instant rollbacks and transaction audit logs.
+          </div>
+          <div class="card">
+            <div class="card-title">
+              <span>Live C++ ActionStack (LIFO)</span>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn btn-primary btn-sm" onclick="pushDemoStack()">+ Push Action</button>
+                <button class="btn btn-danger btn-sm" onclick="popDemoStack()">- Pop Action</button>
+              </div>
+            </div>
+            <div id="ds-stack-info" style="font-size: 0.85rem; margin-bottom: 12px; color: var(--color-text-muted);"></div>
+            <div id="ds-stack-visual" class="ds-visual-container">
+              <!-- Rendered by admin.js -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: Queue -->
+        <div id="ds-tab-queue" class="ds-tab-content">
+          <div class="ds-info-banner">
+            <strong>Fair Dispatch Queue:</strong> First-In-First-Out (FIFO) buffer. Used in EV SmartCharge for fair waiting queue management, ensuring arriving vehicles are assigned in deterministic sequence as ports free up.
+          </div>
+          <div class="card">
+            <div class="card-title">
+              <span>Live C++ Waiting Queue (FIFO)</span>
+              <button class="btn btn-primary btn-sm" onclick="processWaitingQueue()">▶ Dequeue / Process</button>
+            </div>
+            <div id="ds-queue-info" style="font-size: 0.85rem; margin-bottom: 12px; color: var(--color-text-muted);"></div>
+            <div id="ds-queue-visual" class="ds-visual-container">
+              <!-- Rendered by admin.js -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 4: Linked List -->
+        <div id="ds-tab-linkedlist" class="ds-tab-content">
+          <div class="ds-info-banner">
+            <strong>Dynamic Node Chain:</strong> Heap-allocated node chain with pointers. In EV SmartCharge, a custom singly linked list logs vehicle session telemetry dynamically with zero reallocation overhead.
+          </div>
+          <div class="card">
+            <div class="card-title">
+              <span>Live C++ Singly Linked List (Pointers & Nodes)</span>
+              <button class="btn btn-primary btn-sm" onclick="insertDemoLinkedList()">+ Insert at Head</button>
+            </div>
+            <div id="ds-linkedlist-info" style="font-size: 0.85rem; margin-bottom: 12px; color: var(--color-text-muted);"></div>
+            <div id="ds-linkedlist-visual" class="ds-visual-container">
+              <!-- Rendered by admin.js -->
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ==================== SECTION 8: ASSIGNMENT HISTORY ==================== -->
+      <section id="section-history" class="section-panel">
+        <div class="section-header">
+          <div>
+            <h2>Assignment Audit History</h2>
+            <p>Chronological history retrieved directly from the C++ ActionStack.</p>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="loadHistory()">↻ Refresh</button>
+        </div>
+
+        <div class="card">
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Action Type</th>
+                  <th>Vehicle ID</th>
+                  <th>Station ID</th>
+                  <th>Operation Details</th>
+                </tr>
+              </thead>
+              <tbody id="history-table-tbody">
+                <!-- Loaded by admin.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 9: REPORTS ==================== -->
+      <section id="section-reports" class="section-panel">
+        <div class="section-header">
+          <div>
+            <h2>Reports & System Analytics</h2>
+            <p>Analytical summaries computed by the C++ backend.</p>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+          
+          <div class="card">
+            <div class="card-title">Station Utilization Breakdown</div>
+            <div style="font-size: 2.2rem; font-weight: 700; color: var(--color-primary-dark); margin: 12px 0;" id="rep-utilization-val">0%</div>
+            <p style="font-size: 0.85rem; color: var(--color-text-muted); line-height: 1.6;">
+              Reflects the percentage of total installed charging capacity actively transferring energy to electric vehicles.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Connector Standard Distribution</div>
+            <div id="rep-connector-distribution" style="margin-top: 12px;">
+              <!-- Loaded by admin.js -->
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+  </div>
+  </div> <!-- /admin-app-container -->
+
+  <script src="/js/api.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>
+

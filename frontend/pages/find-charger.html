@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find Charging Stations — EV SmartCharge</title>
+  <meta name="description" content="Search and discover compatible EV charging stations with real-time slot availability.">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+</head>
+<body>
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="site-header">
+    <div class="header-inner container">
+      <a href="/" class="brand-logo">
+        <div class="brand-icon">⚡</div>
+        <div class="brand-text">
+          <span>EV SmartCharge</span>
+          <small>Charge Smarter</small>
+        </div>
+      </a>
+
+      <nav class="main-nav">
+        <ul class="nav-list">
+          <li><a href="/">Home</a></li>
+          <li><a href="/pages/find-charger.html" class="active">Find a Charger</a></li>
+          <li><a href="/pages/solutions.html">Solutions</a></li>
+          <li><a href="/pages/about.html">About Us</a></li>
+          <li><a href="/pages/contact.html">Contact</a></li>
+          <li><a href="#" onclick="openQuickRegisterModal(); return false;" class="nav-driver">⚡ Register EV / Book Slot</a></li>
+        </ul>
+      </nav>
+
+      <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+    </div>
+  </header>
+
+  <!-- ==================== SEARCH & HERO ==================== -->
+  <section class="section" style="background: var(--color-surface); border-bottom: 1px solid var(--color-border); padding: 40px 0;">
+    <div class="container">
+      <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+        <span class="badge badge-type" style="margin-bottom: 12px;">LIVE NETWORK DISCOVERY</span>
+        <h1 style="font-size: 2.2rem; color: var(--color-primary-dark); margin-bottom: 12px;">Find an EV Charging Station</h1>
+        <p style="color: var(--color-text-muted); font-size: 1rem; margin-bottom: 24px;">
+          Locate compatible charging ports, view live availability status, and book slots directly through our C++ slot engine.
+        </p>
+
+        <!-- Search & Filter Controls -->
+        <div class="search-bar" style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;">
+          <input type="text" id="station-search-input" placeholder="Search by Station ID (e.g., 101, 102), location, or type..." style="flex: 2; min-width: 260px; padding: 12px 16px; border: 1px solid var(--color-border); border-radius: var(--radius-sm); font-size: 0.95rem; outline: none;">
+
+          <select id="connector-filter" style="flex: 1; min-width: 140px; padding: 12px 16px; border: 1px solid var(--color-border); border-radius: var(--radius-sm); font-size: 0.95rem; background: #fff;">
+            <option value="ALL">All Connectors</option>
+            <option value="CCS">CCS (DC Fast)</option>
+            <option value="CHAdeMO">CHAdeMO</option>
+            <option value="Type2">Type 2 (AC)</option>
+          </select>
+
+          <select id="status-filter" style="flex: 1; min-width: 140px; padding: 12px 16px; border: 1px solid var(--color-border); border-radius: var(--radius-sm); font-size: 0.95rem; background: #fff;">
+            <option value="ALL">All Statuses</option>
+            <option value="AVAILABLE">Available Now</option>
+            <option value="OCCUPIED">Occupied</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== DEMO MAP & STATIONS GRID ==================== -->
+  <section class="section">
+    <div class="container">
+
+      <!-- Interactive Demonstration Map (SVG) -->
+      <div class="card" style="margin-bottom: 32px; overflow: hidden; padding: 0;">
+        <div style="padding: 16px 20px; background: #F9FAF9; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <div>
+            <strong>Interactive Charging Corridor Map</strong>
+            <span style="font-size: 0.8rem; color: var(--color-text-muted); margin-left: 8px;">Bengaluru Metro & Expressway Corridor Hubs</span>
+          </div>
+          <span class="badge badge-available">● Live Network Telemetry</span>
+        </div>
+
+        <div style="position: relative; background: #E5ECE7; height: 260px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+          <!-- SVG Map Graphic -->
+          <svg width="100%" height="100%" viewBox="0 0 800 260" xmlns="http://www.w3.org/2000/svg" style="position: absolute; top:0; left:0;">
+            <path d="M 0 130 Q 200 40 400 130 T 800 130" fill="none" stroke="#D1DDD4" stroke-width="24" />
+            <path d="M 200 0 L 200 260" fill="none" stroke="#D1DDD4" stroke-width="16" />
+            <path d="M 600 0 L 600 260" fill="none" stroke="#D1DDD4" stroke-width="16" />
+            <circle cx="150" cy="110" r="14" fill="#138447" opacity="0.9" />
+            <text x="150" y="114" font-size="10" fill="#fff" text-anchor="middle" font-weight="bold">101</text>
+            <circle cx="280" cy="80" r="14" fill="#138447" opacity="0.9" />
+            <text x="280" y="84" font-size="10" fill="#fff" text-anchor="middle" font-weight="bold">102</text>
+            <circle cx="380" cy="140" r="14" fill="#138447" opacity="0.9" />
+            <text x="380" y="144" font-size="10" fill="#fff" text-anchor="middle" font-weight="bold">103</text>
+            <circle cx="480" cy="100" r="14" fill="#138447" opacity="0.9" />
+            <text x="480" y="104" font-size="10" fill="#fff" text-anchor="middle" font-weight="bold">104</text>
+            <circle cx="580" cy="170" r="14" fill="#E9A23B" opacity="0.9" />
+            <text x="580" y="174" font-size="10" fill="#fff" text-anchor="middle" font-weight="bold">105</text>
+            <circle cx="680" cy="120" r="14" fill="#138447" opacity="0.9" />
+            <text x="680" y="124" font-size="10" fill="#fff" text-anchor="middle" font-weight="bold">106</text>
+          </svg>
+          <div style="position: absolute; bottom: 12px; left: 16px; background: rgba(255,255,255,0.92); padding: 6px 12px; border-radius: 4px; font-size: 0.75rem; border: 1px solid var(--color-border); box-shadow: var(--shadow-sm);">
+            ● <span style="color:#138447; font-weight:bold;">Green</span>: Available | ● <span style="color:#E9A23B; font-weight:bold;">Amber</span>: In Use
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Header -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 style="font-size: 1.3rem; color: var(--color-primary-dark);">Registered Charging Stations</h2>
+        <span id="results-count" class="badge badge-type">Loading...</span>
+      </div>
+
+      <!-- Dynamic Cards Grid -->
+      <div id="stations-display-grid" class="stations-grid">
+        <!-- Rendered by /js/main.js via api.get('/stations') -->
+      </div>
+
+      <div style="margin-top: 32px; background: #E8F4EC; border-left: 4px solid var(--color-primary); padding: 16px 20px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;">
+        <h4 style="color: var(--color-primary-dark); margin-bottom: 6px;">Intelligent Charging Priority:</h4>
+        <p style="font-size: 0.85rem; color: var(--color-text-main); line-height: 1.6;">
+          Our network dispatch engine continuously sorts available charging bays by maximum power capacity. Arriving vehicles are dynamically matched with the highest-speed compatible charger, minimizing dwell times and maximizing energy throughput.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom" style="border: none; padding: 24px 0 0;">
+        <p>© 2026 EV SmartCharge Technologies Pvt. Ltd. All Rights Reserved.</p>
+        <p style="color: #6C8E7B; font-size: 0.75rem;">Empowering clean, green, connected electric mobility across India.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>
+

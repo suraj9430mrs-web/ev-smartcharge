@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+Allow: /pages/find-charger.html
+Allow: /pages/solutions.html
+Allow: /pages/about.html
+Allow: /pages/contact.html
+
+Disallow: /admin.html
+Disallow: /pages/dashboard.html
+Disallow: /pages/bookings.html
+Disallow: /pages/login.html
+Disallow: /pages/register.html
+Disallow: /api/
+
+Sitemap: https://evsmartcharge.in/sitemap.xml
+

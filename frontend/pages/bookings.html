@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Bookings — EV SmartCharge</title>
+  <meta name="description" content="View and manage your EV charging reservations, track active charging bays, and print official charging receipts.">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+</head>
+<body>
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="site-header">
+    <div class="header-container container">
+      <a href="/" class="brand-logo">
+        <div class="logo-icon">⚡</div>
+        <div class="brand-text">
+          <strong>EV SmartCharge</strong>
+          <small>Charge Smarter</small>
+        </div>
+      </a>
+
+      <nav class="main-nav">
+        <ul class="nav-list">
+          <li><a href="/">Home</a></li>
+          <li><a href="/pages/find-charger.html">Find a Charger</a></li>
+          <li><a href="/pages/solutions.html">Solutions</a></li>
+          <li><a href="/pages/bookings.html" class="active">My Bookings</a></li>
+          <li><a href="/pages/dashboard.html">Dashboard</a></li>
+          <li><a href="#" onclick="auth.logout(); return false;" style="color: #D9534F;">Logout</a></li>
+        </ul>
+      </nav>
+
+      <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+    </div>
+  </header>
+
+  <!-- ==================== PAGE BANNER ==================== -->
+  <section class="section" style="background: var(--color-surface); border-bottom: 1px solid var(--color-border); padding: 36px 0;">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+        <div>
+          <span class="badge badge-type" style="margin-bottom: 8px;">RESERVATION MANAGER</span>
+          <h1 style="font-size: 2rem; color: var(--color-primary-dark); margin-bottom: 4px;">My Charging Reservations</h1>
+          <p style="color: var(--color-text-secondary); font-size: 0.95rem;">
+            Real-time charging bay allocations and historical charging receipts
+          </p>
+        </div>
+        <button class="btn btn-primary" onclick="openBookingModal()">
+          ⚡ Book New Charging Slot
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== BOOKINGS LISTING ==================== -->
+  <main class="container" style="padding-top: 32px; padding-bottom: 60px;">
+
+    <!-- Filter & Search Controls -->
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 24px;">
+      
+      <!-- Filter Tabs -->
+      <div class="booking-tabs" style="margin-bottom: 0;">
+        <button class="booking-tab-btn active" onclick="filterByStatus('ALL', this)">All Reservations (<span id="count-all">0</span>)</button>
+        <button class="booking-tab-btn" onclick="filterByStatus('Charging', this)">⚡ Active (<span id="count-charging">0</span>)</button>
+        <button class="booking-tab-btn" onclick="filterByStatus('Confirmed', this)">Upcoming (<span id="count-confirmed">0</span>)</button>
+        <button class="booking-tab-btn" onclick="filterByStatus('Completed', this)">Completed (<span id="count-completed">0</span>)</button>
+        <button class="booking-tab-btn" onclick="filterByStatus('Cancelled', this)">Cancelled (<span id="count-cancelled">0</span>)</button>
+      </div>
+
+      <!-- Search Box -->
+      <div style="min-width: 260px;">
+        <input type="text" id="booking-search" placeholder="Search reference or vehicle..." oninput="handleSearch()" style="width: 100%; padding: 8px 14px; border: 1px solid var(--color-border); border-radius: var(--radius-sm); font-size: 0.9rem; outline: none;">
+      </div>
+    </div>
+
+    <!-- Bookings Table Container -->
+    <div class="table-responsive">
+      <table class="app-table">
+        <thead>
+          <tr>
+            <th>Booking Reference</th>
+            <th>Electric Vehicle</th>
+            <th>Charging Station & Location</th>
+            <th>Reservation Window</th>
+            <th>Energy (kWh)</th>
+            <th>Est. Duration</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="bookings-table-body">
+          <tr>
+            <td colspan="8" style="text-align: center; padding: 40px; color: var(--color-text-secondary);">
+              Loading your bookings...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+  <!-- ==================== OFFICIAL PRINTABLE RECEIPT MODAL ==================== -->
+  <div id="receipt-modal" class="modal-overlay">
+    <div class="modal-card" style="max-width: 600px;">
+      <div class="modal-header no-print">
+        <h3>⚡ Official Booking Receipt</h3>
+        <button class="modal-close-btn" onclick="closeReceiptModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="receipt-wrapper" id="receipt-content">
+          <!-- Dynamically populated -->
+        </div>
+        <div class="no-print" style="margin-top: 20px; display: flex; gap: 12px;">
+          <button class="btn btn-secondary" style="flex: 1;" onclick="closeReceiptModal()">Close</button>
+          <button class="btn btn-primary" style="flex: 1;" onclick="window.print();">🖨️ Print Official Receipt</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom" style="border: none; padding: 24px 0 0;">
+        <p>© 2026 EV SmartCharge Technologies Pvt. Ltd. All Rights Reserved.</p>
+        <p style="color: #6C8E7B; font-size: 0.75rem;">Empowering clean, green, connected electric mobility across India.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+    if (!auth.requireAuth()) {
+      // Handled by api.js
+    }
+
+    let allBookings = [];
+    let currentFilter = 'ALL';
+
+    async function loadBookings() {
+      try {
+        allBookings = await api.get('/bookings');
+        updateCounts();
+        applyFilterAndRender();
+      } catch (err) {
+        showToast('Error loading bookings: ' + err.message, 'error');
+      }
+    }
+
+    function updateCounts() {
+      document.getElementById('count-all').textContent = allBookings.length;
+      document.getElementById('count-charging').textContent = allBookings.filter(b => b.status === 'Charging').length;
+      document.getElementById('count-confirmed').textContent = allBookings.filter(b => b.status === 'Confirmed' || b.status === 'Pending').length;
+      document.getElementById('count-completed').textContent = allBookings.filter(b => b.status === 'Completed').length;
+      document.getElementById('count-cancelled').textContent = allBookings.filter(b => b.status === 'Cancelled').length;
+    }
+
+    function filterByStatus(status, btnElement) {
+      currentFilter = status;
+      document.querySelectorAll('.booking-tabs .booking-tab-btn').forEach(btn => btn.classList.remove('active'));
+      if (btnElement) btnElement.classList.add('active');
+      applyFilterAndRender();
+    }
+
+    function handleSearch() {
+      applyFilterAndRender();
+    }
+
+    function applyFilterAndRender() {
+      const query = document.getElementById('booking-search').value.toLowerCase().trim();
+      let list = allBookings;
+
+      if (currentFilter !== 'ALL') {
+        if (currentFilter === 'Confirmed') {
+          list = list.filter(b => b.status === 'Confirmed' || b.status === 'Pending');
+        } else {
+          list = list.filter(b => b.status === currentFilter);
+        }
+      }
+
+      if (query) {
+        list = list.filter(b => 
+          b.bookingReference.toLowerCase().includes(query) ||
+          b.vehicleRegistration.toLowerCase().includes(query) ||
+          (b.stationName && b.stationName.toLowerCase().includes(query))
+        );
+      }
+
+      renderTable(list);
+    }
+
+    function renderTable(list) {
+      const tbody = document.getElementById('bookings-table-body');
+      if (list.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" style="text-align: center; padding: 48px; color: var(--color-text-secondary);">
+              No reservations matching the current criteria.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = list.map(b => {
+        const statusClass = `status-${b.status.toLowerCase()}`;
+        return `
+          <tr>
+            <td>
+              <strong style="color: var(--color-primary-dark); font-family: monospace; font-size: 0.95rem;">
+                ${b.bookingReference}
+              </strong>
+            </td>
+            <td>
+              <strong>${b.vehicleRegistration}</strong>
+              <div style="font-size: 0.8rem; color: #666;">${b.vehicleModel || 'EV'} • <span class="badge badge-type" style="padding:1px 5px;">${b.vehicleConnector || 'CCS'}</span></div>
+            </td>
+            <td>
+              <div><strong>${b.stationName || 'Station #' + b.stationId}</strong></div>
+              <div style="font-size: 0.8rem; color: #666;">${b.stationLocation || 'Corridor Hub'} (${b.chargingSpeed || 150} kW)</div>
+            </td>
+            <td>
+              <div><strong>${b.bookingDate}</strong></div>
+              <div style="font-size: 0.8rem; color: #666;">${b.startTime} - ${b.endTime}</div>
+            </td>
+            <td>${b.requiredEnergy} kWh</td>
+            <td>${b.estimatedDuration} mins</td>
+            <td><span class="status-pill ${statusClass}">${b.status}</span></td>
+            <td>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn btn-secondary btn-sm" onclick="viewReceipt(${b.id})">Receipt</button>
+                ${(b.status === 'Confirmed' || b.status === 'Waiting') ? `
+                  <button class="btn btn-danger btn-sm" onclick="cancelBooking(${b.id})">Cancel</button>
+                ` : ''}
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function cancelBooking(bid) {
+      if (!confirm('Are you sure you want to cancel this charging slot reservation?')) return;
+      try {
+        await api.post(`/bookings/${bid}/cancel`, {});
+        showToast('Reservation cancelled successfully.', 'success');
+        loadBookings();
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    }
+
+    async function viewReceipt(bid) {
+      try {
+        const res = await api.get(`/bookings/${bid}`);
+        const b = res.booking;
+        const receiptDiv = document.getElementById('receipt-content');
+
+        receiptDiv.innerHTML = `
+          <div class="receipt-header">
+            <div style="font-size: 2rem; color: var(--color-primary); margin-bottom: 4px;">⚡</div>
+            <h2 style="color: var(--color-primary-dark); font-size: 1.4rem; margin-bottom: 2px;">EV SMARTCHARGE</h2>
+            <p style="font-size: 0.8rem; color: var(--color-text-secondary); margin-bottom: 8px;">Official Slot Allocation & Charging Receipt</p>
+            <div class="receipt-ref">${b.bookingReference}</div>
+          </div>
+
+          <div style="font-size: 0.9rem; line-height: 1.8;">
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid #EFEFEF; padding:6px 0;">
+              <span><strong>Customer Name:</strong></span>
+              <span>${b.customerName}</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid #EFEFEF; padding:6px 0;">
+              <span><strong>Vehicle Plate:</strong></span>
+              <span>${b.vehicleRegistration} (${b.vehicleModel})</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid #EFEFEF; padding:6px 0;">
+              <span><strong>Connector Standard:</strong></span>
+              <span><span class="badge badge-type">${b.vehicleConnector}</span></span>
+            </div>
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid #EFEFEF; padding:6px 0;">
+              <span><strong>Assigned Station:</strong></span>
+              <span><strong>${b.stationName}</strong> (${b.chargingSpeed} kW DC Fast)</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid #EFEFEF; padding:6px 0;">
+              <span><strong>Location:</strong></span>
+              <span>${b.stationLocation}</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid #EFEFEF; padding:6px 0;">
+              <span><strong>Reservation Window:</strong></span>
+              <span><strong>${b.bookingDate} • ${b.startTime} to ${b.endTime}</strong></span>
+            </div>
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid #EFEFEF; padding:6px 0;">
+              <span><strong>Energy Required:</strong></span>
+              <span>${b.requiredEnergy} kWh (Battery: ${b.currentBattery}%)</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid #EFEFEF; padding:6px 0;">
+              <span><strong>Estimated Duration:</strong></span>
+              <span><strong>${b.estimatedDuration} Minutes</strong></span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:8px 0; font-size:1rem;">
+              <span><strong>Current Status:</strong></span>
+              <span><span class="status-pill status-${b.status.toLowerCase()}">${b.status}</span></span>
+            </div>
+          </div>
+
+          <div style="margin-top: 20px; padding: 12px; background: #F9FAF9; border-radius: 4px; font-size: 0.75rem; color: #777; text-align: center;">
+            Allocated via EV SmartCharge C++ Sequential Search & Sorting Engine.<br>
+            Please arrive at the assigned bay 5 minutes before scheduled start time.
+          </div>
+        `;
+
+        document.getElementById('receipt-modal').classList.add('active');
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    }
+
+    function closeReceiptModal() {
+      document.getElementById('receipt-modal').classList.remove('active');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadBookings();
+    });
+  </script>
+</body>
+</html>
+

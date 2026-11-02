@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Charging Solutions — EV SmartCharge</title>
+  <meta name="description" content="Commercial, workplace, public and residential EV charging infrastructure solutions.">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+</head>
+<body>
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="site-header">
+    <div class="header-inner container">
+      <a href="/" class="brand-logo">
+        <div class="brand-icon">⚡</div>
+        <div class="brand-text">
+          <span>EV SmartCharge</span>
+          <small>Charge Smarter</small>
+        </div>
+      </a>
+
+      <nav class="main-nav">
+        <ul class="nav-list">
+          <li><a href="/">Home</a></li>
+          <li><a href="/pages/find-charger.html">Find a Charger</a></li>
+          <li><a href="/pages/solutions.html" class="active">Solutions</a></li>
+          <li><a href="/pages/about.html">About Us</a></li>
+          <li><a href="/pages/contact.html">Contact</a></li>
+          <li><a href="#" onclick="openQuickRegisterModal(); return false;" class="nav-driver">⚡ Register EV / Book Slot</a></li>
+        </ul>
+      </nav>
+
+      <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+    </div>
+  </header>
+
+  <!-- ==================== HERO ==================== -->
+  <section class="section" style="background: var(--color-surface); border-bottom: 1px solid var(--color-border); padding: 48px 0;">
+    <div class="container" style="text-align: center; max-width: 800px;">
+      <span class="badge badge-type" style="margin-bottom: 12px;">END-TO-END CHARGING ECOSYSTEM</span>
+      <h1 style="font-size: 2.3rem; color: var(--color-primary-dark); margin-bottom: 16px;">Tailored EV Charging Solutions</h1>
+      <p style="color: var(--color-text-muted); font-size: 1.05rem; line-height: 1.6;">
+        From residential wall boxes to multi-megawatt highway charging depots, EV SmartCharge delivers intelligent load balancing, hardware interoperability, and high-speed energy transfer.
+      </p>
+    </div>
+  </section>
+
+  <!-- ==================== FOUR CORE PILLARS ==================== -->
+  <section class="section">
+    <div class="container">
+      <div class="cards-grid cards-grid--2" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px;">
+
+        <!-- 1. Home Charging -->
+        <div class="card" style="display: flex; flex-direction: column;">
+          <div style="font-size: 2.2rem; margin-bottom: 12px;">🏠</div>
+          <h3 class="card-title">Home & Residential Charging</h3>
+          <p class="card-desc" style="margin-bottom: 16px;">
+            Convenient, safe overnight charging designed for individual bungalows and shared apartment societies.
+          </p>
+          <ul style="font-size: 0.875rem; color: var(--color-text-main); margin-bottom: 20px; line-height: 1.8; padding-left: 20px;">
+            <li>7.4 kW to 22 kW AC Type 2 wall box chargers</li>
+            <li>Dynamic load balancing to prevent domestic breaker trips</li>
+            <li>Automated off-peak electricity tariff charging</li>
+            <li>Compact weather-proof IP65 enclosures</li>
+          </ul>
+          <a href="/pages/contact.html" class="btn btn-secondary" style="margin-top: auto;">Inquire Home Installation</a>
+        </div>
+
+        <!-- 2. Workplace Charging -->
+        <div class="card" style="display: flex; flex-direction: column;">
+          <div style="font-size: 2.2rem; margin-bottom: 12px;">🏢</div>
+          <h3 class="card-title">Workplace & Enterprise Hubs</h3>
+          <p class="card-desc" style="margin-bottom: 16px;">
+            Empower employees and corporate visitors with convenient daytime EV charging while parked at work.
+          </p>
+          <ul style="font-size: 0.875rem; color: var(--color-text-main); margin-bottom: 20px; line-height: 1.8; padding-left: 20px;">
+            <li>Smart RFID and corporate ID card authentication</li>
+            <li>Shared energy management across multiple parking bays</li>
+            <li>Monthly employee expense accounting reports</li>
+            <li>Automated queuing during high-demand business hours</li>
+          </ul>
+          <a href="/pages/contact.html" class="btn btn-secondary" style="margin-top: auto;">Explore Workplace Solutions</a>
+        </div>
+
+        <!-- 3. Public Fast Charging -->
+        <div class="card" style="display: flex; flex-direction: column;">
+          <div style="font-size: 2.2rem; margin-bottom: 12px;">⚡</div>
+          <h3 class="card-title">Public Highway & Transit Hubs</h3>
+          <p class="card-desc" style="margin-bottom: 16px;">
+            Ultra-fast DC charging corridors strategically located along expressways, metro interchanges, and retail malls.
+          </p>
+          <ul style="font-size: 0.875rem; color: var(--color-text-main); margin-bottom: 20px; line-height: 1.8; padding-left: 20px;">
+            <li>50 kW to 150 kW dual-gun CCS and CHAdeMO chargers</li>
+            <li>Liquid-cooled charging cables for high-amperage transfer</li>
+            <li>Integrated payment terminal & QR scan capability</li>
+            <li>Real-time C++ slot availability engine integration</li>
+          </ul>
+          <a href="/pages/find-charger.html" class="btn btn-primary" style="margin-top: auto;">Locate Public Stations</a>
+        </div>
+
+        <!-- 4. Fleet Charging -->
+        <div class="card" style="display: flex; flex-direction: column;">
+          <div style="font-size: 2.2rem; margin-bottom: 12px;">🚛</div>
+          <h3 class="card-title">Commercial & Logistics Fleets</h3>
+          <p class="card-desc" style="margin-bottom: 16px;">
+            Dedicated depot charging infrastructure tailored for delivery fleets, electric taxis, and municipal buses.
+          </p>
+          <ul style="font-size: 0.875rem; color: var(--color-text-main); margin-bottom: 20px; line-height: 1.8; padding-left: 20px;">
+            <li>Sequential batch charging optimized by departure schedules</li>
+            <li>Guaranteed depot turnaround times with high uptime SLA</li>
+            <li>Customized connector configurations for fleet vehicles</li>
+            <li>Deep telemetry analytics with battery health logging</li>
+          </ul>
+          <a href="/pages/contact.html" class="btn btn-secondary" style="margin-top: auto;">Contact Fleet Advisory</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== TECHNICAL MATRIX ==================== -->
+  <section class="section section-alternate">
+    <div class="container">
+      <div class="section-title">
+        <h2>Charging Specification Matrix</h2>
+        <p>Comparison of charging standards supported by our slot management system.</p>
+      </div>
+
+      <div class="card" style="overflow-x: auto;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Connector Standard</th>
+              <th>Current Type</th>
+              <th>Power Rating</th>
+              <th>Typical Charging Time (0-80%)</th>
+              <th>Common EV Compatibility</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="badge badge-type">CCS-2</span></td>
+              <td>DC Fast</td>
+              <td>50 kW – 150 kW</td>
+              <td>25 – 45 mins</td>
+              <td>Tata Nexon EV, Mahindra XUV400, MG ZS EV, Hyundai Ioniq</td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-type">CHAdeMO</span></td>
+              <td>DC Fast</td>
+              <td>50 kW – 75 kW</td>
+              <td>40 – 60 mins</td>
+              <td>Nissan Leaf, specialized imported commercial EVs</td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-type">Type 2</span></td>
+              <td>AC Single / 3-Phase</td>
+              <td>7.4 kW – 22 kW</td>
+              <td>3 – 6 hours</td>
+              <td>All Indian & European standard passenger EVs</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom" style="border: none; padding: 24px 0 0;">
+        <p>© 2026 EV SmartCharge Technologies Pvt. Ltd. All Rights Reserved.</p>
+        <p style="color: #6C8E7B; font-size: 0.75rem;">Empowering clean, green, connected electric mobility across India.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>
+

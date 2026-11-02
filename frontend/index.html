@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EV SmartCharge — Power Your Journey. Charge Smarter.</title>
+  <meta name="description" content="Discover convenient EV charging stations and experience intelligent charging slot management powered by C++ data structures.">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+</head>
+<body>
+
+  <!-- ==================== HEADER NAVIGATION ==================== -->
+  <header class="site-header">
+    <div class="header-inner container">
+      <a href="/" class="brand-logo">
+        <div class="brand-icon">⚡</div>
+        <div class="brand-text">
+          <span>EV SmartCharge</span>
+          <small>Charge Smarter</small>
+        </div>
+      </a>
+
+      <nav class="main-nav">
+        <ul class="nav-list">
+          <li><a href="/" class="active">Home</a></li>
+          <li><a href="/pages/find-charger.html">Find a Charger</a></li>
+          <li><a href="/pages/solutions.html">Solutions</a></li>
+          <li><a href="/pages/about.html">About Us</a></li>
+          <li><a href="/pages/contact.html">Contact</a></li>
+          <li><a href="#" onclick="openQuickRegisterModal(); return false;" class="nav-driver">⚡ Register EV / Book Slot</a></li>
+        </ul>
+      </nav>
+
+      <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+    </div>
+  </header>
+
+  <!-- ==================== HERO SECTION ==================== -->
+  <section class="hero-section">
+    <div class="hero-container container">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span>⚡ INDIA'S PREMIER SMART EV CHARGING NETWORK</span>
+        </div>
+        <h1>Power Your Journey.<br><span class="hero-highlight">Charge Smarter.</span></h1>
+        <p>Discover ultra-fast DC charging stations, real-time bay availability, and intelligent slot reservation engineered for seamless electric mobility across India.</p>
+        <div class="hero-buttons">
+          <a href="/pages/find-charger.html" class="btn btn-hero-primary">Find Charging Stations ➔</a>
+          <button class="btn btn-hero-secondary" onclick="openQuickRegisterModal()">🚗 Book a Slot Now</button>
+        </div>
+      </div>
+
+      <div class="hero-art-container">
+        <div class="hero-station-visual">
+          <div class="station-pillar">
+            <div class="pillar-screen">
+              <div class="screen-header">EV SMARTCHARGE HUB</div>
+              <div class="screen-bolt">⚡</div>
+              <div class="screen-stats">150 kW DC FAST CHARGING</div>
+              <div class="screen-status">STATION ACTIVE & READY</div>
+            </div>
+            <div class="pillar-cable"></div>
+            <div class="pillar-plug"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== LIVE STATS SECTION ==================== -->
+  <section class="stats-section">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number" id="stat-total-stations">—</div>
+          <div class="stat-label">Charging Stations</div>
+          <div class="stat-sub">Sorted by Charging Speed</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="stat-available-slots">—</div>
+          <div class="stat-label">Available Slots</div>
+          <div class="stat-sub">Instant Assignment Ready</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="stat-total-vehicles">—</div>
+          <div class="stat-label">Registered Vehicles</div>
+          <div class="stat-sub">Array Indexed Storage</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="stat-total-assignments">—</div>
+          <div class="stat-label">Successful Assignments</div>
+          <div class="stat-sub">Logged in Action Stack</div>
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: 14px;">
+        <span class="badge badge-available">● Live Charging Network Telemetry Active</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CHARGING SOLUTIONS ==================== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <h2>Intelligent EV Charging Solutions</h2>
+        <p>Reliable, ultra-fast charging engineered for modern electric mobility across enterprise, home, and highway corridors.</p>
+      </div>
+
+      <div class="cards-grid cards-grid--4">
+        <div class="card">
+          <div class="card-icon">🏠</div>
+          <h3 class="card-title">Home Charging</h3>
+          <p class="card-desc">Compact AC wall boxes and smart night-time scheduling to wake up to a full charge every morning.</p>
+          <a href="/pages/solutions.html" class="btn-text">Learn More ➔</a>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🏢</div>
+          <h3 class="card-title">Workplace Charging</h3>
+          <p class="card-desc">Turnkey charging hubs for corporate offices, IT parks, and campuses with employee privilege access.</p>
+          <a href="/pages/solutions.html" class="btn-text">Learn More ➔</a>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">⚡</div>
+          <h3 class="card-title">Public Fast Charging</h3>
+          <p class="card-desc">High-power DC fast charging bays strategically positioned across transit hubs and metro expressways.</p>
+          <a href="/pages/solutions.html" class="btn-text">Learn More ➔</a>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🚛</div>
+          <h3 class="card-title">Fleet Hubs</h3>
+          <p class="card-desc">Dedicated high-throughput depot charging for delivery vans, logistics fleets, and electric commercial vehicles.</p>
+          <a href="/pages/solutions.html" class="btn-text">Learn More ➔</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== HOW IT WORKS ==================== -->
+  <section class="section section-alternate">
+    <div class="container">
+      <div class="section-title">
+        <h2>How EV SmartCharge Works</h2>
+        <p>A seamless four-step workflow powered by data structure-backed optimization.</p>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <h3 class="step-title">Vehicle Registration</h3>
+          <p class="step-desc">Enter vehicle ID, connector standard (CCS, CHAdeMO, Type2), battery state, and required kWh into the array store.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <h3 class="step-title">Smart Slot Search</h3>
+          <p class="step-desc">Sequential search scans the speed-sorted station array to select the fastest compatible available charger.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <h3 class="step-title">Instant Assign or Queue</h3>
+          <p class="step-desc">Compatible stations are assigned immediately. If occupied, vehicles enter the FIFO waiting queue with guaranteed position.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">04</div>
+          <h3 class="step-title">Auto Queue Dispatch</h3>
+          <p class="step-desc">When charging completes, the engine automatically dispatches waiting vehicles and logs the event to the action stack.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== BENEFITS ==================== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <h2>Why EV SmartCharge?</h2>
+        <p>Engineered to deliver high uptime, maximum throughput, and fairness.</p>
+      </div>
+
+      <div class="benefits-grid">
+        <div class="benefit-item">
+          <div class="benefit-icon">🚀</div>
+          <div>
+            <h4>Speed-Optimized Priority</h4>
+            <p>Bubble sort organizes charging stations by kW capacity so vehicles always receive maximum available throughput.</p>
+          </div>
+        </div>
+
+        <div class="benefit-item">
+          <div class="benefit-icon">⏱️</div>
+          <div>
+            <h4>Deterministic FIFO Fairness</h4>
+            <p>Queue ordering prevents starvation and guarantees fair charging access for all electric vehicle drivers.</p>
+          </div>
+        </div>
+
+        <div class="benefit-item">
+          <div class="benefit-icon">🛡️</div>
+          <div>
+            <h4>Connector Compatibility</h4>
+            <p>Strict type validation ensures CCS, CHAdeMO, and Type2 vehicles only mate with matching connector pins.</p>
+          </div>
+        </div>
+
+        <div class="benefit-item">
+          <div class="benefit-icon">📊</div>
+          <div>
+            <h4>Audit Action Stack</h4>
+            <p>Every assignment and completion is pushed onto a custom LIFO stack for instant traceability and rollback safety.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FAQ ACCORDION ==================== -->
+  <section class="section section-alternate">
+    <div class="container">
+      <div class="section-title">
+        <h2>Frequently Asked Questions</h2>
+        <p>Common questions about our intelligent EV charging architecture.</p>
+      </div>
+
+      <div class="faq-accordion">
+        <div class="faq-item">
+          <div class="faq-question">How does EV SmartCharge calculate estimated charging duration?</div>
+          <div class="faq-answer">Estimated charging time is computed using the formula: <code>Charging Time (mins) = (Required Energy in kWh / Station Charging Speed in kW) × 60</code>. Note that this is a simplified linear estimate that ignores temperature-dependent battery curves and tapering.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">What happens when all compatible stations are busy?</div>
+          <div class="faq-answer">The vehicle is automatically inserted into the custom FIFO waiting queue. When any station completes charging, the engine evaluates waiting vehicles in order and assigns the first compatible vehicle.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">Which data structures are used in the backend?</div>
+          <div class="faq-answer">The C++ core implements: <strong>Arrays</strong> for vehicle and station records, a <strong>Queue</strong> for waiting vehicles, a <strong>Stack</strong> for action audit logs, a <strong>Linked List</strong> for dynamic request sessions, <strong>Bubble Sort</strong> for sorting stations by speed, and <strong>Sequential / Binary Search</strong> for locating slots.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">Is the C++ engine actually running the live logic?</div>
+          <div class="faq-answer">Yes! Unlike static mockups, all assignment operations, queue processing, sorting, and stack pushes execute in real-time inside the native C++ binary and communicate via REST APIs.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="brand-logo" style="margin-bottom: 12px;">
+            <div class="brand-icon">⚡</div>
+            <div class="brand-text">
+              <span style="color: #fff;">EV SmartCharge</span>
+              <small style="color: #A3BFB0;">Charge Smarter</small>
+            </div>
+          </div>
+          <p style="font-size: 0.85rem; color: #A3BFB0; line-height: 1.6;">
+            Power Your Journey. Charge Smarter.<br>
+            India's premier smart EV charging network.<br>
+            Outer Ring Road Tech Corridor, Bengaluru, India.
+          </p>
+        </div>
+
+        <div>
+          <h4 style="color: #fff; font-size: 0.95rem; margin-bottom: 12px;">Navigation</h4>
+          <ul style="list-style: none; font-size: 0.85rem; line-height: 2;">
+            <li><a href="/" style="color: #D2DFD7; text-decoration: none;">Home</a></li>
+            <li><a href="/pages/find-charger.html" style="color: #D2DFD7; text-decoration: none;">Find a Charger</a></li>
+            <li><a href="/pages/solutions.html" style="color: #D2DFD7; text-decoration: none;">Charging Solutions</a></li>
+            <li><a href="/pages/about.html" style="color: #D2DFD7; text-decoration: none;">About Us</a></li>
+            <li><a href="/pages/contact.html" style="color: #D2DFD7; text-decoration: none;">Contact & Support</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 style="color: #fff; font-size: 0.95rem; margin-bottom: 12px;">Charging Standards</h4>
+          <ul style="list-style: none; font-size: 0.85rem; line-height: 2; color: #D2DFD7;">
+            <li>⚡ CCS-2 (50 kW – 150 kW DC Fast)</li>
+            <li>⚡ CHAdeMO (DC High Throughput)</li>
+            <li>⚡ Type 2 (AC Destination Charging)</li>
+            <li>🛡️ 99.5% Network Availability SLA</li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 style="color: #fff; font-size: 0.95rem; margin-bottom: 12px;">24/7 Operations</h4>
+          <p style="font-size: 0.85rem; color: #A3BFB0; margin-bottom: 8px;">
+            National Driver Helpline: 1800-EV-SMART<br>
+            Email: support@evsmartcharge.in
+          </p>
+          <div style="margin-top: 14px;">
+            <a href="/admin.html" style="color: #6E947E; font-size: 0.775rem; text-decoration: none;">Operations Portal Login 🔒</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 EV SmartCharge Technologies Pvt. Ltd. All Rights Reserved.</p>
+        <p style="color: #6C8E7B; font-size: 0.75rem;">Empowering clean, green, connected electric mobility across India.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>
+

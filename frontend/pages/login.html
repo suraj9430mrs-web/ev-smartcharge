@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — EV SmartCharge</title>
+  <meta name="description" content="Sign in to your EV SmartCharge account to reserve charging slots, track live sessions, and view your booking receipts.">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+</head>
+<body>
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="site-header">
+    <div class="header-container container">
+      <a href="/" class="brand-logo">
+        <div class="logo-icon">⚡</div>
+        <div class="brand-text">
+          <strong>EV SmartCharge</strong>
+          <small>Charge Smarter</small>
+        </div>
+      </a>
+
+      <nav class="main-nav">
+        <ul class="nav-list">
+          <li><a href="/">Home</a></li>
+          <li><a href="/pages/find-charger.html">Find a Charger</a></li>
+          <li><a href="/pages/solutions.html">Solutions</a></li>
+          <li><a href="/pages/about.html">About Us</a></li>
+          <li><a href="/pages/contact.html">Contact</a></li>
+        </ul>
+      </nav>
+
+      <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+    </div>
+  </header>
+
+  <!-- ==================== LOGIN FORM ==================== -->
+  <main class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div style="font-size: 2.2rem; margin-bottom: 8px;">⚡</div>
+        <h2>Customer Sign In</h2>
+        <p>Access your EV SmartCharge dashboard and reservations</p>
+      </div>
+
+      <div id="login-error" style="display: none; background: #FCE8E6; border: 1px solid #F5C6CB; color: #C5221F; padding: 12px 16px; border-radius: var(--radius-sm); font-size: 0.9rem; margin-bottom: 20px;"></div>
+      <div id="login-success" style="display: none; background: #E6F4EA; border: 1px solid #C3E2CD; color: #137333; padding: 12px 16px; border-radius: var(--radius-sm); font-size: 0.9rem; margin-bottom: 20px;"></div>
+
+      <form id="login-form">
+        <div class="booking-form-group">
+          <label for="login-email">Email Address *</label>
+          <input type="email" id="login-email" placeholder="name@example.com" required autofocus>
+        </div>
+
+        <div class="booking-form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <label for="login-password">Password *</label>
+            <a href="#" onclick="openForgotPassword(); return false;" style="font-size: 0.8rem; color: var(--color-primary); text-decoration: none;">Forgot Password?</a>
+          </div>
+          <input type="password" id="login-password" placeholder="Enter your password" required>
+        </div>
+
+        <div style="margin: 16px 0 24px;">
+          <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--color-text-secondary); cursor: pointer;">
+            <input type="checkbox" id="login-remember" checked>
+            <span>Remember me on this device for 30 days</span>
+          </label>
+        </div>
+
+        <button type="submit" id="login-btn" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 1rem;">
+          Sign In to Account ➔
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        Don't have an account yet? <a href="/pages/register.html">Create One Here</a>
+      </div>
+
+      <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--color-border); text-align: center;">
+        <a href="/admin.html" style="font-size: 0.8rem; color: #7F8C8D; text-decoration: none;">
+          🔒 Operations Center Staff Portal Login
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- ==================== FORGOT PASSWORD MODAL ==================== -->
+  <div id="forgot-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Reset Password</h3>
+        <button class="modal-close-btn" onclick="closeForgotPassword()">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 20px;">
+          Enter your registered email address and we will dispatch a secure verification link to reset your password.
+        </p>
+        <div id="forgot-alert" style="display:none; padding:12px; border-radius:4px; font-size:0.85rem; margin-bottom:16px;"></div>
+        <form id="forgot-form">
+          <div class="booking-form-group">
+            <label for="forgot-email">Account Email *</label>
+            <input type="email" id="forgot-email" placeholder="name@example.com" required>
+          </div>
+          <div style="margin-top: 20px; display: flex; gap: 10px;">
+            <button type="button" class="btn btn-secondary" style="flex:1;" onclick="closeForgotPassword()">Cancel</button>
+            <button type="submit" class="btn btn-primary" style="flex:1;">Send Reset Link</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom" style="border: none; padding: 24px 0 0;">
+        <p>© 2026 EV SmartCharge Technologies Pvt. Ltd. All Rights Reserved.</p>
+        <p style="color: #6C8E7B; font-size: 0.75rem;">Empowering clean, green, connected electric mobility across India.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/api.js"></script>
+  <script>
+    // Redirect if already logged in
+    if (auth.isLoggedIn()) {
+      const u = auth.getUser();
+      if (u && u.role === 'admin') {
+        window.location.href = '/admin.html';
+      } else {
+        window.location.href = '/pages/dashboard.html';
+      }
+    }
+
+    const loginForm = document.getElementById('login-form');
+    const errBox = document.getElementById('login-error');
+    const successBox = document.getElementById('login-success');
+    const loginBtn = document.getElementById('login-btn');
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errBox.style.display = 'none';
+      successBox.style.display = 'none';
+
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      const rememberMe = document.getElementById('login-remember').checked;
+
+      loginBtn.disabled = true;
+      loginBtn.textContent = 'Authenticating...';
+
+      try {
+        const res = await api.post('/auth/login', {
+          email,
+          password,
+          rememberMe
+        });
+
+        if (res.success && res.token) {
+          auth.setSession(res.token, res.user, rememberMe);
+          successBox.textContent = 'Login successful! Redirecting...';
+          successBox.style.display = 'block';
+          showToast('Welcome back, ' + res.user.fullName.split(' ')[0] + '!', 'success');
+
+          // Check redirect param
+          const urlParams = new URLSearchParams(window.location.search);
+          const redirect = urlParams.get('redirect');
+
+          setTimeout(() => {
+            if (redirect && redirect.startsWith('/')) {
+              window.location.href = redirect;
+            } else if (res.user.role === 'admin') {
+              window.location.href = '/admin.html';
+            } else {
+              window.location.href = '/pages/dashboard.html';
+            }
+          }, 800);
+        }
+      } catch (err) {
+        errBox.textContent = err.message || 'Invalid email or password. Please try again.';
+        errBox.style.display = 'block';
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Sign In to Account ➔';
+      }
+    });
+
+    // Forgot Password Modal
+    function openForgotPassword() {
+      document.getElementById('forgot-modal').classList.add('active');
+    }
+    function closeForgotPassword() {
+      document.getElementById('forgot-modal').classList.remove('active');
+    }
+
+    const forgotForm = document.getElementById('forgot-form');
+    forgotForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('forgot-email').value.trim();
+      const alertBox = document.getElementById('forgot-alert');
+
+      try {
+        const res = await api.post('/auth/forgot-password', { email });
+        alertBox.style.background = '#E6F4EA';
+        alertBox.style.color = '#137333';
+        alertBox.style.border = '1px solid #C3E2CD';
+        alertBox.textContent = res.message;
+        alertBox.style.display = 'block';
+        forgotForm.reset();
+      } catch (err) {
+        alertBox.style.background = '#FCE8E6';
+        alertBox.style.color = '#C5221F';
+        alertBox.style.border = '1px solid #F5C6CB';
+        alertBox.textContent = err.message;
+        alertBox.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>
+

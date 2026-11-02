@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account — EV SmartCharge</title>
+  <meta name="description" content="Register for an EV SmartCharge account to reserve high-speed charging bays across India, track charging sessions, and manage your electric vehicles.">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+</head>
+<body>
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="site-header">
+    <div class="header-container container">
+      <a href="/" class="brand-logo">
+        <div class="logo-icon">⚡</div>
+        <div class="brand-text">
+          <strong>EV SmartCharge</strong>
+          <small>Charge Smarter</small>
+        </div>
+      </a>
+
+      <nav class="main-nav">
+        <ul class="nav-list">
+          <li><a href="/">Home</a></li>
+          <li><a href="/pages/find-charger.html">Find a Charger</a></li>
+          <li><a href="/pages/solutions.html">Solutions</a></li>
+          <li><a href="/pages/about.html">About Us</a></li>
+          <li><a href="/pages/contact.html">Contact</a></li>
+        </ul>
+      </nav>
+
+      <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+    </div>
+  </header>
+
+  <!-- ==================== REGISTRATION FORM ==================== -->
+  <main class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div style="font-size: 2.2rem; margin-bottom: 8px;">⚡</div>
+        <h2>Create an Account</h2>
+        <p>Join India's premier intelligent EV charging network</p>
+      </div>
+
+      <div id="register-error" style="display: none; background: #FCE8E6; border: 1px solid #F5C6CB; color: #C5221F; padding: 12px 16px; border-radius: var(--radius-sm); font-size: 0.9rem; margin-bottom: 20px;"></div>
+      <div id="register-success" style="display: none; background: #E6F4EA; border: 1px solid #C3E2CD; color: #137333; padding: 12px 16px; border-radius: var(--radius-sm); font-size: 0.9rem; margin-bottom: 20px;"></div>
+
+      <form id="register-form">
+        <div class="booking-form-group">
+          <label for="reg-name">Full Name *</label>
+          <input type="text" id="reg-name" placeholder="e.g. Vikram Malhotra" required autofocus>
+        </div>
+
+        <div class="form-row">
+          <div class="booking-form-group">
+            <label for="reg-email">Email Address *</label>
+            <input type="email" id="reg-email" placeholder="vikram@example.com" required>
+          </div>
+          <div class="booking-form-group">
+            <label for="reg-mobile">Mobile Number *</label>
+            <input type="tel" id="reg-mobile" placeholder="+91 98765 43210" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="booking-form-group">
+            <label for="reg-password">Password *</label>
+            <input type="password" id="reg-password" placeholder="At least 6 characters" required>
+            <div class="password-meter"><div id="password-meter-bar" class="password-meter-fill"></div></div>
+          </div>
+          <div class="booking-form-group">
+            <label for="reg-confirm">Confirm Password *</label>
+            <input type="password" id="reg-confirm" placeholder="Repeat password" required>
+          </div>
+        </div>
+
+        <div style="margin-top: 14px; margin-bottom: 20px;">
+          <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.85rem; color: var(--color-text-secondary); cursor: pointer;">
+            <input type="checkbox" id="reg-terms" required style="margin-top: 3px;">
+            <span>I agree to the <a href="#" style="color: var(--color-primary); font-weight: 500;">Terms of Service</a> and <a href="#" style="color: var(--color-primary); font-weight: 500;">Privacy Policy</a>.</span>
+          </label>
+        </div>
+
+        <button type="submit" id="reg-btn" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 1rem;">
+          Create EV SmartCharge Account ➔
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        Already have an account? <a href="/pages/login.html">Sign In Here</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom" style="border: none; padding: 24px 0 0;">
+        <p>© 2026 EV SmartCharge Technologies Pvt. Ltd. All Rights Reserved.</p>
+        <p style="color: #6C8E7B; font-size: 0.75rem;">Empowering clean, green, connected electric mobility across India.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/api.js"></script>
+  <script>
+    // Password Strength Meter
+    const pwdInput = document.getElementById('reg-password');
+    const pwdBar = document.getElementById('password-meter-bar');
+
+    pwdInput.addEventListener('input', () => {
+      const val = pwdInput.value;
+      let score = 0;
+      if (val.length >= 6) score += 33;
+      if (val.length >= 8 && /[A-Z]/.test(val) && /[0-9]/.test(val)) score += 34;
+      if (/[^A-Za-z0-9]/.test(val)) score += 33;
+
+      pwdBar.style.width = score + '%';
+      if (score < 40) pwdBar.style.background = '#D9534F';
+      else if (score < 80) pwdBar.style.background = '#E9A23B';
+      else pwdBar.style.background = '#138447';
+    });
+
+    // Registration Form Submission
+    const regForm = document.getElementById('register-form');
+    const errBox = document.getElementById('register-error');
+    const successBox = document.getElementById('register-success');
+    const regBtn = document.getElementById('reg-btn');
+
+    regForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errBox.style.display = 'none';
+      successBox.style.display = 'none';
+
+      const fullName = document.getElementById('reg-name').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const mobile = document.getElementById('reg-mobile').value.trim();
+      const password = document.getElementById('reg-password').value;
+      const confirmPassword = document.getElementById('reg-confirm').value;
+      const acceptTerms = document.getElementById('reg-terms').checked;
+
+      if (password !== confirmPassword) {
+        errBox.textContent = 'Passwords do not match. Please verify.';
+        errBox.style.display = 'block';
+        return;
+      }
+
+      regBtn.disabled = true;
+      regBtn.textContent = 'Creating Account...';
+
+      try {
+        const res = await api.post('/auth/register', {
+          fullName,
+          email,
+          mobile,
+          password,
+          confirmPassword,
+          acceptTerms
+        });
+
+        if (res.success && res.token) {
+          auth.setSession(res.token, res.user, true);
+          successBox.textContent = 'Account created successfully! Redirecting to your dashboard...';
+          successBox.style.display = 'block';
+          showToast('Welcome to EV SmartCharge, ' + fullName.split(' ')[0] + '!', 'success');
+          setTimeout(() => {
+            window.location.href = '/pages/dashboard.html';
+          }, 1000);
+        }
+      } catch (err) {
+        errBox.textContent = err.message || 'Registration failed. Please check your information.';
+        errBox.style.display = 'block';
+        regBtn.disabled = false;
+        regBtn.textContent = 'Create EV SmartCharge Account ➔';
+      }
+    });
+  </script>
+</body>
+</html>
+

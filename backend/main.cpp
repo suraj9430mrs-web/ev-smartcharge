@@ -30,6 +30,11 @@ int main(int argc, char* argv[]) {
     if (envDb) {
         dbPath = envDb;
     }
+    if (fs::path(dbPath).has_parent_path()) {
+        try {
+            fs::create_directories(fs::path(dbPath).parent_path());
+        } catch (...) {}
+    }
     if (!db.init(dbPath)) {
         std::cerr << "[FATAL] Failed to initialize persistent database!\n";
         return 1;

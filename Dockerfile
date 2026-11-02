@@ -25,6 +25,7 @@ FROM ubuntu:22.04 AS runtime
 RUN apt-get update && apt-get install -y \
     libsqlite3-0 \
     ca-certificates \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app

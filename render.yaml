@@ -1,0 +1,19 @@
+# Render Blueprint Specification for EV SmartCharge
+# https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: ev-smartcharge
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: oregon
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: DATABASE_PATH
+        value: /app/data/ev_smartcharge.db
+      - key: ADMIN_PASSWORD
+        value: smartcharge2026

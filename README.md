@@ -2,7 +2,26 @@
 
 **Power Your Journey. Charge Smarter.**
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/suraj9430mrs-web/ev-smartcharge)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/suraj9430mrs-web/ev-smartcharge)
+[![C++17](https://img.shields.io/badge/C%2B%2B-17-green.svg)](https://isocpp.org/)
+[![Database](https://img.shields.io/badge/Database-SQLite3%20WAL-orange.svg)](https://sqlite.org/)
+
 A full-stack EV charging management platform with a C++ backend, SQLite database, and responsive web frontend. Features real-time station discovery, intelligent slot assignment, user authentication, booking management, and an admin operations console.
+
+---
+
+## 🌐 1-Click Cloud Deployment (Render)
+
+Click the button below to automatically deploy the complete C++ platform to Render's free cloud:
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/suraj9430mrs-web/ev-smartcharge)
+
+Render will:
+1. Detect `render.yaml` and parse the service specifications
+2. Build the multi-stage Docker container (`Ubuntu 22.04` + `Clang` + `SQLite3`)
+3. Compile the C++ backend binary and mount the web frontend
+4. Expose a secure public HTTPS URL with automatic health checking on `/health`
 
 ---
 
